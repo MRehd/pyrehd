@@ -1,0 +1,26 @@
+parameters:
+  - name: subscription_id
+    type: string
+  - name: location
+    type: string
+  - name: service_connection
+    type: string
+  - name: env
+    type: string
+  - name: bicep_template_path
+    type: string
+  - name: job_name
+    type: string
+
+jobs:
+- job: ${{ parameters.job_name }}
+  steps:
+  - checkout: self
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: ${{ parameters.service_connection }}
+      scriptType: 'bash'
+      subscription: 'inlineScript'
+      inlineScript: |
+        az account set --subscription ${{ parameters.subscription_id }}
+        az deployment sub create --name 'deployment-infra' --location ${{ parameters.location }} --template-file ${{ parameters.bicep_template_path }} --parameters env=${{ parameters.env }}

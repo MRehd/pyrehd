@@ -1,0 +1,7 @@
+terraform -chdir=infra/terraform init
+terraform -chdir=infra/terraform fmt -recursive
+terraform -chdir=infra/terraform refresh
+terraform -chdir=infra/terraform plan
+terraform -chdir=infra/terraform apply -auto-approve
+
+check why libraries are being reinstalled

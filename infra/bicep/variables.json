@@ -1,0 +1,12 @@
+{
+  "rehd_rg_name": "rg-rehd-<env>",
+  "location": "northeurope",
+  "admin_client_id": "",
+  "databricks_obj_id": "",
+  "ip_rules": [
+    {
+      "ip": "",
+      "action": "Allow"
+    }
+  ]
+}

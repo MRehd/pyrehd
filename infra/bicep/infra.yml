@@ -1,0 +1,34 @@
+trigger:
+  branches:
+    include:
+      - '*'
+
+variables:
+  subscription_id_dev: caf953a9-9db9-4549-b9ba-153a0d16fbf0
+  location: northeurope
+
+stages:
+
+- stage: what_if
+  jobs:
+  - template: what_if.yml
+    parameters:
+      job_name: what_if_dev
+      subscription_id: $(subscription_id_dev)
+      location: $(northeurope)
+      env: dev
+      service_connection: rehd-deployment
+      bicep_template_path: infra/main.bicep
+
+- stage: create
+  dependsOn: what_if
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'), or(eq(variables['Build.Reason'], 'IndividualCI'), eq(variables['Build.Reason'], 'Manual')))
+  jobs:
+  - template: create.yml
+    parameters:
+      job_name: create_dev
+      subscription_id: $(subscription_id_dev)
+      location: $(northeurope)
+      env: dev
+      service_connection: rehd-deployment
+      bicep_template_path: main.bicep
